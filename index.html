@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pengumuman Kelulusan SDN 091464 Parapat</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 50px; }
+    input { padding: 10px; font-size: 16px; width: 250px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    .result { margin-top: 30px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>Pengumuman Kelulusan</h1>
+  <p>SD Negeri 091464 Parapat</p>
+  <input id="nisn" placeholder="Masukkan NISN">
+  <button onclick="cekKelulusan()">Cek</button>
+  <div class="result" id="hasil"></div>
+
+  <script>
+    async function cekKelulusan() {
+      const nisn = document.getElementById("nisn").value;
+      const hasil = document.getElementById("hasil");
+      hasil.innerHTML = "Mencari data...";
+
+      try {
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbykNRgjRoQGNq-EjIbzpTj-5K15KgC9Fk8CxOCcS7oXy8b1m-gsp1bKAZjdlLqudYgY4A/exec?nisn=${nisn}`);
+        const data = await res.json();
+
+        if (data.status === "success") {
+          hasil.innerHTML = `<h2>${data.nama}</h2><p>Status: <strong>${data.statusKelulusan}</strong></p><p>Nilai: ${data.nilai}</p><p>${data.keterangan}</p>`;
+        } else {
+          hasil.innerHTML = "NISN tidak ditemukan.";
+        }
+      } catch (e) {
+        hasil.innerHTML = "Terjadi kesalahan.";
+      }
+    }
+  </script>
+</body>
+</html>
